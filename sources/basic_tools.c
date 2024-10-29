@@ -6,11 +6,15 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 00:52:22 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/10/29 03:24:29 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/10/29 18:11:05 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./include/philo.h"
+#include "../include/philo.h"
+
+bool			nbr_check(char *string);
+bool			ft_isdigit(int c);
+unsigned int	ft_atou(const char *str);
 
 bool	nbr_check(char *string)
 {
@@ -23,41 +27,34 @@ bool	nbr_check(char *string)
 		return (false);
 	while (string[i])
 	{
-		if (string[i] < '0' || string[i] > 9)
+		if (!(ft_isdigit(string[i])))
 			return (false);
+		i++;
 	}
 	return (true);
 }
 
-int	ft_atoi(const char *str)
+unsigned int	ft_atou(const char *str)
 {
-	int	i;
-	int	counter;
-	int	negator;
+	int				i;
+	unsigned int	counter;
 
-	negator = 1;
 	i = 0;
 	counter = 0;
 	while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
 		i++;
-	if (str[i] == '+' || str[i] == '-')
-	{
-		if (str[i] == '-')
-			negator *= -1;
-		i++;
-	}
 	while (ft_isdigit(str[i]) == 1)
 	{
 		counter = counter * 10 + str[i] - 48;
 		i++;
 	}
-	return (counter * negator);
+	return (counter);
 }
 
-int	ft_isdigit(int c)
+bool	ft_isdigit(int c)
 {
 	if (c < '0' || c > '9')
-		return (0);
+		return (false);
 	else
-		return (1);
+		return (true);
 }
