@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 20:15:19 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/10/29 18:15:53 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/10/29 18:24:57 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,13 @@ t_philo		*init_philos(t_dataset *data)
 	{
 		pointer_2 = (t_philo *)malloc(sizeof(t_philo));
 		pointer_2->position = i;
-		pointer_1->left_philo = pointer_2;
-		pointer_2->right_philo = pointer_2;
-		pointer_1 = pointer_2;
+		pointer_1->left_philo = &(*pointer_2);
+		pointer_2->right_philo = &(*pointer_1);
+		pointer_1 = &(*pointer_2);
 		i++;
 	}
-	pointer_2->left_philo = first;
-	first->right_philo = pointer_2;
+	pointer_2->left_philo = &(*first);
+	first->right_philo = &(*pointer_2);
 }
 
 int	main(int argc, char **argv)
