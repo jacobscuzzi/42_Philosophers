@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 20:15:19 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/10/29 18:24:57 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/10/30 01:12:41 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ t_philo		*init_philos(t_dataset *data)
 	first = (t_philo *)malloc(sizeof(t_philo));
 	first->position = 1;
 	i = 2;
-	pointer_1 = first;
+	pointer_1 = &(*first);
 	while (i <= data->seats)
 	{
 		pointer_2 = (t_philo *)malloc(sizeof(t_philo));
@@ -74,8 +74,9 @@ t_philo		*init_philos(t_dataset *data)
 		pointer_1 = &(*pointer_2);
 		i++;
 	}
-	pointer_2->left_philo = &(*first);
-	first->right_philo = &(*pointer_2);
+	pointer_1->left_philo = &(*first);
+	first->right_philo = &(*pointer_1);
+	return (first);
 }
 
 int	main(int argc, char **argv)
@@ -95,4 +96,5 @@ int	main(int argc, char **argv)
 		return (EXIT_FAILURE);
 	printf("Philos initialized\n");
 	print_philos(data->first_philo);
+	return (0);
 }

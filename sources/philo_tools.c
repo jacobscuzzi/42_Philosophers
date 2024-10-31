@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 17:51:21 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/10/29 18:02:17 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/10/30 01:01:08 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	print_philos(t_philo *first)
 	while (pointer->position > 1)
 	{
 		printf("Philosopher Nr %u\n", pointer->position);
-		pointer = first->left_philo;
+		pointer = pointer->left_philo;
 	}
 
 }
