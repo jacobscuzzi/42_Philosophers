@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 17:51:21 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/10/30 01:01:08 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/01 15:05:51 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,13 @@ void	print_philos(t_philo *first)
 	t_philo	*pointer;
 
 	pointer = first;
-	printf("Philosopher Nr %u\n", pointer->position);
+	printf("Philosopher Nr %u (Right Fork: %p  Left Fork: %p) \n"
+		, pointer->position, pointer->right_fork, pointer->left_fork);
 	pointer = first->left_philo;
 	while (pointer->position > 1)
 	{
-		printf("Philosopher Nr %u\n", pointer->position);
+		printf("Philosopher Nr %u (Right Fork: %p  Left Fork: %p)\n"
+		, pointer->position, pointer->right_fork, pointer->left_fork);
 		pointer = pointer->left_philo;
 	}
-
 }

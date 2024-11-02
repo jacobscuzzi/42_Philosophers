@@ -1,8 +1,9 @@
 NAME 		=	philo
 
-FLAGS		=	-Wall -Werror -Wextra
+FLAGS		=	-Wall -Werror -Wextra -pthread
 
 FILES		=	main.c \
+				parcing.c \
 				basic_tools.c \
 				philo_tools.c
 

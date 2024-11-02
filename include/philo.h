@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 20:17:36 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/10/29 18:03:49 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/01 16:20:27 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdlib.h>
 # include <limits.h>
 # include <fcntl.h>
+# include <pthread.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 
@@ -26,6 +27,7 @@
 typedef struct s_philo
 {
 	unsigned int	position;
+	pthread_t		thread;
 	struct s_philo	*left_philo;
 	struct s_fork	*left_fork;
 	struct s_fork	*right_fork;
@@ -49,6 +51,11 @@ typedef struct s_fork
 {
 	bool	free;
 }	t_fork;
+
+bool		arg_check(int argc, char **argv);
+t_dataset	*init_data(int argc, char **argv);
+t_philo		*init_philos(t_dataset *data);
+int			init_forks(t_dataset *data);
 
 bool			nbr_check(char *string);
 
