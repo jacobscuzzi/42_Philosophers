@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 20:17:36 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/11/01 16:20:27 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/02 22:23:29 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct s_dataset
 typedef struct s_fork
 {
 	bool	free;
+	pthread_mutex_t	lock;
 }	t_fork;
 
 bool		arg_check(int argc, char **argv);

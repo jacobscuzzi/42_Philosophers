@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 13:41:16 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/11/01 16:54:38 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/02 22:30:02 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ bool	arg_check(int argc, char **argv)
 	return (true);
 }
 
-void	*init_thread()
+void	*init_thread(t_dataset *datat)
 {
 	printf("Thread was created\n");
 }
@@ -67,6 +67,8 @@ int		init_forks(t_dataset *data)
 	pointer->left_fork = (t_fork *)malloc(sizeof(t_fork));
 	if (!(pointer->left_fork))
 		return (EXIT_FAILURE);
+	pointer->left_fork->free = true;
+	pthread_mutex_init(&(pointer->left_fork->lock), NULL);
 	i = 2;
 	while (i <= data->seats)
 	{
@@ -75,6 +77,7 @@ int		init_forks(t_dataset *data)
 		if (!(pointer->left_fork))
 			return (EXIT_FAILURE);
 		pointer->left_fork->free = true;
+		pthread_mutex_init(&(pointer->left_fork->lock), NULL);
 		pointer->right_fork = pointer->right_philo->left_fork;
 		i++;
 	}
@@ -93,7 +96,7 @@ t_philo		*init_philos(t_dataset *data)
 	if (!first)
 		return (NULL);
 	first->position = 1;
-	if (pthread_create(&(first->thread), NULL, &init_thread, NULL) != 0)
+	if (pthread_create(&(first->thread), NULL, (void *)&init_thread, data) != 0)
 		return (NULL);
 	pthread_join(first->thread, NULL);
 	i = 2;
@@ -102,7 +105,7 @@ t_philo		*init_philos(t_dataset *data)
 	{
 		ptr_2 = (t_philo *)malloc(sizeof(t_philo));
 		ptr_2->position = i;
-		if (pthread_create(&(ptr_2->thread), NULL, &init_thread, NULL) != 0)
+		if (pthread_create(&(ptr_2->thread), NULL, (void *)&init_thread, NULL) != 0)
 			return (NULL);
 		pthread_join(ptr_2->thread, NULL);
 		ptr_1->left_philo = &(*ptr_2);
