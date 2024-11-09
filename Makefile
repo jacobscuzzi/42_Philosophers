@@ -5,7 +5,8 @@ FLAGS		=	-Wall -Werror -Wextra -pthread
 FILES		=	main.c \
 				parcing.c \
 				basic_tools.c \
-				philo_tools.c
+				philo_tools.c \
+				philo.c
 
 SOURCES_DIR	=	./sources/
 

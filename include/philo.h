@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 20:17:36 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/11/02 22:23:29 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/09 02:13:38 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,20 @@
 # include <fcntl.h>
 # include <pthread.h>
 # include <sys/types.h>
+# include <sys/time.h>
 # include <sys/wait.h>
 
 
 
 typedef struct s_philo
 {
-	unsigned int	position;
-	pthread_t		thread;
-	struct s_philo	*left_philo;
-	struct s_fork	*left_fork;
-	struct s_fork	*right_fork;
-	struct s_philo	*right_philo;
-
+	unsigned int		position;
+	pthread_t			thread;
+	struct s_philo		*left_philo;
+	struct s_fork		*left_fork;
+	struct s_fork		*right_fork;
+	struct s_philo		*right_philo;
+	void				*data;
 }	t_philo;
 
 typedef struct s_dataset
@@ -45,6 +46,7 @@ typedef struct s_dataset
 	unsigned int	t_spleep;
 	unsigned int	nbr_eat;
 	t_philo			*first_philo;
+	struct timeval	start_time;
 }	t_dataset;
 
 typedef struct s_fork
@@ -64,5 +66,7 @@ bool			ft_isdigit(int c);
 int unsigned	ft_atou(const char *str);
 
 void			print_philos(t_philo *philo);
+
+int				run_simulation(t_dataset *data);
 
 #endif

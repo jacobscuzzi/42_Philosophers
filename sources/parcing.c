@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 13:41:16 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/11/02 22:30:02 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/09 02:14:32 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,6 @@ bool	arg_check(int argc, char **argv)
 	return (true);
 }
 
-void	*init_thread(t_dataset *datat)
-{
-	printf("Thread was created\n");
-}
 t_dataset	*init_data(int argc, char **argv)
 {
 	t_dataset	*data;
@@ -96,18 +92,14 @@ t_philo		*init_philos(t_dataset *data)
 	if (!first)
 		return (NULL);
 	first->position = 1;
-	if (pthread_create(&(first->thread), NULL, (void *)&init_thread, data) != 0)
-		return (NULL);
-	pthread_join(first->thread, NULL);
+	first->data = (t_dataset *)data;
 	i = 2;
 	ptr_1 = &(*first);
 	while (i <= data->seats)
 	{
 		ptr_2 = (t_philo *)malloc(sizeof(t_philo));
 		ptr_2->position = i;
-		if (pthread_create(&(ptr_2->thread), NULL, (void *)&init_thread, NULL) != 0)
-			return (NULL);
-		pthread_join(ptr_2->thread, NULL);
+		ptr_2->data = (t_dataset *)data;
 		ptr_1->left_philo = &(*ptr_2);
 		ptr_2->right_philo = &(*ptr_1);
 		ptr_1 = &(*ptr_2);
