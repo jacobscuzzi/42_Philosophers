@@ -6,20 +6,23 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 20:14:53 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/11/09 02:14:57 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/10 01:15:23 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
+void	thinking(t_philo *philo);
+
 void	*philo(t_philo *philo)
 {
-	printf("Philosopher was created\n");
+	printf("Philosopher %d was created\n", philo->position);
+	thinking(philo);
 }
 
 void	thinking(t_philo *philo)
 {
-	printf("Philosopher is  \n");
+	printf("Philosopher %d is thinking \n", philo->position);
 }
 int	create_threads(t_dataset *data)
 {

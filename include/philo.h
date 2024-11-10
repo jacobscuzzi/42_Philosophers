@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 20:17:36 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/11/09 02:13:38 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/10 01:12:09 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # include <sys/time.h>
 # include <sys/wait.h>
 
-
+struct	s_dataset;
 
 typedef struct s_philo
 {
@@ -33,7 +33,7 @@ typedef struct s_philo
 	struct s_fork		*left_fork;
 	struct s_fork		*right_fork;
 	struct s_philo		*right_philo;
-	void				*data;
+	struct s_dataset	*data;
 }	t_philo;
 
 typedef struct s_dataset
