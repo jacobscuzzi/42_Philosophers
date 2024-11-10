@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 20:17:36 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/11/10 01:12:09 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/10 16:52:53 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef struct s_dataset
 	unsigned int	t_spleep;
 	unsigned int	nbr_eat;
 	t_philo			*first_philo;
-	struct timeval	start_time;
+	struct timeval	time_start;
 }	t_dataset;
 
 typedef struct s_fork
@@ -55,18 +55,20 @@ typedef struct s_fork
 	pthread_mutex_t	lock;
 }	t_fork;
 
-bool		arg_check(int argc, char **argv);
-t_dataset	*init_data(int argc, char **argv);
-t_philo		*init_philos(t_dataset *data);
-int			init_forks(t_dataset *data);
+bool			arg_check(int argc, char **argv);
+t_dataset		*init_data(int argc, char **argv);
+t_philo			*init_philos(t_dataset *data);
+int				init_forks(t_dataset *data);
 
 bool			nbr_check(char *string);
-
 bool			ft_isdigit(int c);
-int unsigned	ft_atou(const char *str);
-
+unsigned int	ft_atou(const char *str);
 void			print_philos(t_philo *philo);
+unsigned int	get_ts(t_dataset *data);
 
 int				run_simulation(t_dataset *data);
+
+void			thinking(t_philo *philo);
+void			grab_forks(t_philo *philo);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 20:15:19 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/11/09 01:42:10 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/10 15:02:28 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	main(int argc, char **argv)
 	if (!data)
 		return (EXIT_FAILURE);
 	printf("Data initialized\n");
-	gettimeofday(&(data->start_time), NULL);
+	gettimeofday(&(data->time_start), NULL);
 	data->first_philo = init_philos(data);
 	if (!(data->first_philo))
 		return (free(data), EXIT_FAILURE);
@@ -51,7 +51,7 @@ int	main(int argc, char **argv)
 	printf("Forks initialized\n");
 	print_philos(data->first_philo);
 	if (run_simulation(data) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
+		return (EXIT_FAILURE); 
 	free_data(data);
 	return (EXIT_SUCCESS);
 }

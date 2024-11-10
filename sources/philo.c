@@ -6,37 +6,43 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 20:14:53 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/11/10 01:15:23 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/10 16:19:03 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-void	thinking(t_philo *philo);
+int	create_threads(t_dataset *data);
+void	philo(t_philo *philo);
+int	run_simulation(t_dataset *data);
 
-void	*philo(t_philo *philo)
+void philo(t_philo *philo)
 {
-	printf("Philosopher %d was created\n", philo->position);
 	thinking(philo);
+	if (philo->position % 2 == 0)
+		grab_forks(philo);
+	else
+	{
+		usleep(1000);
+		grab_forks(philo);
+	}
 }
 
-void	thinking(t_philo *philo)
-{
-	printf("Philosopher %d is thinking \n", philo->position);
-}
+
 int	create_threads(t_dataset *data)
 {
-	t_philo	*pointer;
+	t_philo	*ptr;
 	int		i;
 
-	pointer = &(*data->first_philo);
-	if (pthread_create(&pointer->thread, NULL, (void *)&philo, data) != 0)
+	ptr = &(*data->first_philo);
+	if (pthread_create(&ptr->thread, NULL, (void *)&philo, ptr) != 0)
 		return (EXIT_FAILURE);
+	printf("First Thread created\n");
 	i = 2;
 	while (i <= data->seats)
 	{
-		pointer = &(*pointer->left_philo);
-		if (pthread_create(&pointer->thread, NULL, (void *)&philo, NULL) != 0)
+		ptr = &(*ptr->left_philo);
+		if (pthread_create(&ptr->thread, NULL, (void *)&philo, ptr) != 0)
 			return (EXIT_FAILURE);
 		i++;
 	}
@@ -52,6 +58,7 @@ int	run_simulation(t_dataset *data)
 	printf("Startig Simulation\n");
 	if (create_threads(data) != EXIT_SUCCESS)
 		return (EXIT_FAILURE);
+	printf("Threads created\n");
 	ptr = &*(data->first_philo);
 	while (i < data->seats)
 	{
