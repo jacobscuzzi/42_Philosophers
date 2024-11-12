@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 17:51:21 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/11/10 16:51:51 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/12 18:05:15 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,13 @@ unsigned int	get_ts(t_dataset *data)
 	return (elapsed_milisec);
 }
 
+void	kill_philo(t_philo *philo)
+{
+	pthread_mutex_unlock(&philo->left_fork->lock);
+	pthread_mutex_unlock(&philo->right_fork->lock);
+}
+
+/*
 void	print_philos(t_philo *first)
 {
 	t_philo	*pointer;
@@ -91,3 +98,4 @@ void	print_philos(t_philo *first)
 		pointer = pointer->left_philo;
 	}
 }
+*/

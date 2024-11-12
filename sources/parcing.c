@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 13:41:16 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/11/09 02:14:32 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/12 17:43:00 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,11 @@ bool	arg_check(int argc, char **argv)
 {
 	int	i;
 
-	printf("starting arg check\n");
 	i = 1;
 	if (argc != 5 && argc != 6)
 		return (false);
 	while (i < argc)
 	{
-		printf("checking argument %d\n", i);
 		if (!nbr_check(argv[i]))
 			return (false);
 		i++;
@@ -46,10 +44,11 @@ t_dataset	*init_data(int argc, char **argv)
 	data->t_die = ft_atou(argv[2]);
 	data->t_eat = ft_atou(argv[3]);
 	data->t_spleep = ft_atou(argv[4]);
+	data->game_over = false;
 	if (argc == 6)
 	{
 		data->limit = true;
-		data->nbr_eat = ft_atou(argv[5]);
+		data->eat_max = ft_atou(argv[5]);
 	}
 	return (data);
 }
