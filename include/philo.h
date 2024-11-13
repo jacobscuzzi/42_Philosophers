@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 20:17:36 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/11/12 18:09:20 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/13 18:57:24 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,9 @@ typedef struct s_philo
 	struct s_dataset	*data;
 	unsigned int		times_eaten;
 	unsigned int		last_meal;
+	bool				left_fork_unlocked;
+	bool				right_fork_unlocked;
+	bool				printf_unlocked;
 }	t_philo;
 
 typedef struct s_dataset
@@ -51,21 +54,22 @@ typedef struct s_dataset
 	struct timeval	time_start;
 	pthread_t		death_check;
 	bool			game_over;
+	pthread_mutex_t	print_lock;
 }	t_dataset;
 
 typedef struct s_fork
 {
-	bool	free;
+	bool			free;
 	pthread_mutex_t	lock;
 }	t_fork;
 
-void			philos_full(t_dataset *data);
 void			philo_dead(t_philo *philo);
 
+int				init_forks(t_dataset *data);
 bool			arg_check(int argc, char **argv);
 t_dataset		*init_data(int argc, char **argv);
-t_philo			*init_philos(t_dataset *data);
-int				init_forks(t_dataset *data);
+void			init_philo(t_philo *philo, t_dataset *data);
+t_philo			*create_philos(t_dataset *data);
 
 bool			nbr_check(char *string);
 bool			ft_isdigit(int c);
@@ -77,8 +81,11 @@ void			kill_philo(t_philo *philo);
 int				run_simulation(t_dataset *data);
 void			livecheck(t_dataset *data);
 
+int				philo_print(t_philo *philo, char *string);
 int				thinking(t_philo *philo);
 int				grab_forks(t_philo *philo);
 int				eating(t_philo *philo);
 int				sleeping(t_philo *philo);
+
+int				philo_print(t_philo *philo, char *string);
 #endif

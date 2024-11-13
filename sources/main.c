@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 20:15:19 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/11/12 17:43:52 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/13 18:57:36 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,10 @@ void	free_data(t_dataset *data)
 
 void	philo_dead(t_philo *philo)
 {
-	printf("%u %d died\n", get_ts(philo->data), philo->position);
 	philo->data->game_over = true;
+	printf("%u %d died\n", get_ts(philo->data), philo->position);
 }
 
-void	philos_full(t_dataset *data)
-{
-	printf("All philos have eaten %d times\n", data->limit);
-	data->game_over = true;
-}
 int	main(int argc, char **argv)
 {
 	t_dataset	*data;
@@ -51,12 +46,11 @@ int	main(int argc, char **argv)
 	if (!data)
 		return (EXIT_FAILURE);
 	gettimeofday(&(data->time_start), NULL);
-	data->first_philo = init_philos(data);
+	data->first_philo = create_philos(data);
 	if (!(data->first_philo))
 		return (free(data), EXIT_FAILURE);
 	if (init_forks(data) == EXIT_FAILURE)
 		return (free_data(data), EXIT_FAILURE);
-	//print_philos(data->first_philo);
 	if (run_simulation(data) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	free_data(data);

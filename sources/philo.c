@@ -6,17 +6,17 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 20:14:53 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/11/12 18:14:51 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/13 18:58:21 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-int	create_threads(t_dataset *data);
+int		create_threads(t_dataset *data);
 void	philo(t_philo *philo);
-int	run_simulation(t_dataset *data);
+int		run_simulation(t_dataset *data);
 
-void philo(t_philo *philo)
+void	philo(t_philo *philo)
 {
 	philo->times_eaten = 0;
 	philo->last_meal = 0;
@@ -38,6 +38,8 @@ void philo(t_philo *philo)
 			return ;
 		if (sleeping(philo) == EXIT_FAILURE)
 			return ;
+		if (thinking(philo) == EXIT_FAILURE)
+			return ;
 		if (grab_forks(philo) == EXIT_FAILURE)
 			return ;
 	}
@@ -45,39 +47,40 @@ void philo(t_philo *philo)
 
 bool	mealcheck(t_dataset *data)
 {
-	t_philo	*ptr;
-	int		limit;
+	t_philo			*ptr;
+	unsigned int	limit;
 
-	limit = data->eat_max;
-	ptr = &(*data->first_philo);
-	if (ptr->times_eaten < limit)
+	if (data->limit == false)
 		return (false);
-	ptr = &(*ptr->left_philo);
-	while (ptr->position != 1)
+	else
 	{
+		limit = data->eat_max;
+		ptr = &(*data->first_philo);
 		if (ptr->times_eaten < limit)
 			return (false);
 		ptr = &(*ptr->left_philo);
+		while (ptr->position != 1)
+		{
+			if (ptr->times_eaten < limit)
+				return (false);
+			ptr = &(*ptr->left_philo);
+		}
+		data->game_over = true;
+		return (true);
 	}
-	return (true);
 }
 
 void	livecheck(t_dataset *data)
 {
 	t_philo			*ptr;
 
+	usleep(1000);
 	while (1)
 	{
-		if (data->limit == true)
-		{
-			if (mealcheck(data))
-			{
-				philos_full(data);
-				return ;
-			}
-		}
+		if (mealcheck(data) == true)
+			return ;
 		ptr = &(*data->first_philo);
-		if (data->t_die < get_ts(data) - ptr->last_meal)
+		if (data->t_die <= (get_ts(data) - ptr->last_meal))
 		{
 			philo_dead(ptr);
 			return ;
@@ -85,14 +88,14 @@ void	livecheck(t_dataset *data)
 		ptr = &(*ptr->left_philo);
 		while (ptr->position != 1)
 		{
-			if (data->t_die < get_ts(data) - ptr->last_meal)
+			if (data->t_die <= (get_ts(data) - ptr->last_meal))
 			{
 				philo_dead(ptr);
 				return ;
 			}
 			ptr = &(*ptr->left_philo);
 		}
-		usleep(100);
+		usleep(1000);
 	}
 }
 

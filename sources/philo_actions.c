@@ -6,73 +6,86 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 13:49:34 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/11/12 18:12:16 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/13 18:58:55 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
+int		philo_print(t_philo *philo, char *string);
 int		thinking(t_philo *philo);
 int		grab_forks(t_philo *philo);
 int		eating(t_philo *philo);
 int		sleeping(t_philo *philo);
 
-
-int	still_alive(t_dataset *data)
+int	philo_print(t_philo *philo, char *string)
 {
-	if (data->game_over == true)
+	if (philo->data->game_over == true)
 		return (EXIT_FAILURE);
-	else
-		return (EXIT_SUCCESS);
+	philo->printf_unlocked = false;
+	pthread_mutex_lock(&(philo->data->print_lock));
+	if (philo->data->game_over == true)
+		return (EXIT_FAILURE);
+	printf("%u %d %s\n", get_ts(philo->data), philo->position, string);
+	philo->printf_unlocked = true;
+	pthread_mutex_unlock(&(philo->data->print_lock));
+	return (EXIT_SUCCESS);
 }
 
 int	thinking(t_philo *philo)
 {
-	if (still_alive(philo->data) == EXIT_FAILURE)
+	if (philo_print(philo, "is thinking") == EXIT_FAILURE)
 		return (kill_philo(philo), EXIT_FAILURE);
-	printf("%u %d is thinking\n", get_ts(philo->data), philo->position);
 	return (EXIT_SUCCESS);
 }
 
 int	grab_forks(t_philo *philo)
 {
-	if (still_alive(philo->data) == EXIT_FAILURE)
+	if (philo->data->game_over == true)
 		return (kill_philo(philo), EXIT_FAILURE);
 	if (philo->position % 2 == 0)
 	{
+		philo->left_fork_unlocked = false;
 		pthread_mutex_lock(&philo->left_fork->lock);
-		printf("%u %d has taken a fork\n", get_ts(philo->data), philo->position);
+		if (philo_print(philo, "has taken a fork") == EXIT_FAILURE)
+			return (kill_philo(philo), EXIT_FAILURE);
+		philo->right_fork_unlocked = false;
 		pthread_mutex_lock(&philo->right_fork->lock);
-		printf("%u %d has taken a fork\n", get_ts(philo->data), philo->position);
+		if (philo_print(philo, "has taken a fork") == EXIT_FAILURE)
+			return (kill_philo(philo), EXIT_FAILURE);
 	}
 	else
 	{
+		philo->right_fork_unlocked = false;
 		pthread_mutex_lock(&philo->right_fork->lock);
-		printf("%u %d has taken a fork\n", get_ts(philo->data), philo->position);
+		if (philo_print(philo, "has taken a fork") == EXIT_FAILURE)
+			return (kill_philo(philo), EXIT_FAILURE);
+		philo->left_fork_unlocked = false;
 		pthread_mutex_lock(&philo->left_fork->lock);
-		printf("%u %d has taken a fork\n", get_ts(philo->data), philo->position);
+		if (philo_print(philo, "has taken a fork") == EXIT_FAILURE)
+			return (kill_philo(philo), EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
 }
 
 int	eating(t_philo *philo)
 {
-	if (still_alive(philo->data) == EXIT_FAILURE)
+	if (philo_print(philo, "is eating") == EXIT_FAILURE)
 		return (kill_philo(philo), EXIT_FAILURE);
-	printf("%u %d is eating\n", get_ts(philo->data), philo->position);
 	philo->last_meal = get_ts(philo->data);
 	usleep(philo->data->t_eat * 1000);
 	pthread_mutex_unlock(&philo->left_fork->lock);
+	philo->left_fork_unlocked = true;
 	pthread_mutex_unlock(&philo->right_fork->lock);
-	philo->last_meal = get_ts(philo->data);
+	philo->right_fork_unlocked = true;
+	philo->times_eaten++;
 	return (EXIT_SUCCESS);
 }
 
 int	sleeping(t_philo *philo)
 {
-	if (still_alive(philo->data) == EXIT_FAILURE)
+	if (philo_print(philo, "is sleeping") == EXIT_FAILURE)
 		return (kill_philo(philo), EXIT_FAILURE);
-	printf("%u %d is sleeping\n", get_ts(philo->data), philo->position);
 	usleep(philo->data->t_spleep * 1000);
 	return (EXIT_SUCCESS);
 }

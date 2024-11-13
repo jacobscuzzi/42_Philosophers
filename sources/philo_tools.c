@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 17:51:21 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/11/12 18:05:15 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/13 18:44:06 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,22 +64,23 @@ unsigned int	get_ts(t_dataset *data)
 {
 	struct timeval	time_now;
 	struct timeval	time_start;
-	unsigned int	elapsed_sec;
-	unsigned int	elapsed_microsec;
-	unsigned int	elapsed_milisec;
+	unsigned int	elapsed_ms;
 
 	gettimeofday(&time_now, NULL);
 	time_start = data->time_start;
-	elapsed_sec = (unsigned int)(time_now.tv_sec - time_start.tv_sec);
-	elapsed_microsec = (unsigned int)(time_now.tv_usec - time_start.tv_usec);
-	elapsed_milisec = elapsed_sec * 1000 + elapsed_microsec / 1000;
-	return (elapsed_milisec);
+	elapsed_ms = (unsigned int)(((time_now.tv_sec - time_start.tv_sec) * 1000)
+			+ ((time_now.tv_usec - time_start.tv_usec) / 1000));
+	return (elapsed_ms);
 }
 
 void	kill_philo(t_philo *philo)
 {
-	pthread_mutex_unlock(&philo->left_fork->lock);
-	pthread_mutex_unlock(&philo->right_fork->lock);
+	if (philo->left_fork_unlocked == false)
+		pthread_mutex_unlock(&philo->left_fork->lock);
+	if (philo->right_fork_unlocked == false)
+		pthread_mutex_unlock(&philo->right_fork->lock);
+	if (philo->printf_unlocked == false)
+		pthread_mutex_unlock(&philo->data->print_lock);
 }
 
 /*
