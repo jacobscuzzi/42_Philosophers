@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 20:15:19 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/11/14 18:23:02 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/14 21:57:09 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	philo_dead(t_philo *philo)
 	pthread_mutex_lock(&philo->data->game_over_lock);
 	philo->data->game_over = true;
 	pthread_mutex_unlock(&philo->data->game_over_lock);
-	printf("%u %d died\n", get_ts(philo->data), philo->position);
+	philo_print(philo, "died");
 }
 
 int	main(int argc, char **argv)

@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 20:17:36 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/11/14 18:38:23 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/14 22:06:02 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,6 @@ typedef struct s_philo
 	unsigned int		times_eaten;
 	pthread_mutex_t		last_meal_lock;
 	unsigned int		last_meal;
-	bool				left_fork_unlocked;
-	bool				right_fork_unlocked;
-	bool				printf_unlocked;
 }	t_philo;
 
 typedef struct s_dataset
@@ -52,19 +49,23 @@ typedef struct s_dataset
 	unsigned int	t_eat;
 	unsigned int	t_spleep;
 	unsigned int	eat_max;
-	t_philo			*first_philo;
-	struct timeval	time_start;
-	pthread_t		death_check;
-	pthread_mutex_t	game_over_lock;
-	bool			game_over;
-	pthread_mutex_t	print_lock;
+	t_philo				*first_philo;
+	struct timeval		time_start;
+	pthread_t			death_check;
+	pthread_mutex_t		game_over_lock;
+	bool				game_over;
+	pthread_mutex_t		print_lock;
 }	t_dataset;
 
 typedef struct s_fork
 {
-	bool			free;
 	pthread_mutex_t	lock;
 }	t_fork;
+
+# define NO_LOCK 0
+# define LEFT_FORK 1
+# define RIGHT_FORK 2
+# define BOTH_FORKS 3
 
 void			philo_dead(t_philo *philo);
 
@@ -79,7 +80,7 @@ bool			ft_isdigit(int c);
 unsigned int	ft_atou(const char *str);
 void			print_philos(t_philo *philo);
 unsigned int	get_ts(t_dataset *data);
-void			kill_philo(t_philo *philo);
+void			kill_philo(t_philo *philo, int flag);
 
 int				run_simulation(t_dataset *data);
 

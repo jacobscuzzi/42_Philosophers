@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 13:41:16 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/11/14 17:37:38 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/14 21:35:38 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ int	init_forks(t_dataset *data)
 	pointer->left_fork = (t_fork *)malloc(sizeof(t_fork));
 	if (!(pointer->left_fork))
 		return (EXIT_FAILURE);
-	pointer->left_fork->free = true;
 	pthread_mutex_init(&(pointer->left_fork->lock), NULL);
 	i = 2;
 	while (i <= data->seats)
@@ -78,7 +77,6 @@ int	init_forks(t_dataset *data)
 		pointer->left_fork = (t_fork *)malloc(sizeof(t_fork));
 		if (!(pointer->left_fork))
 			return (EXIT_FAILURE);
-		pointer->left_fork->free = true;
 		pthread_mutex_init(&(pointer->left_fork->lock), NULL);
 		pointer->right_fork = pointer->right_philo->left_fork;
 		i++;
@@ -90,9 +88,6 @@ int	init_forks(t_dataset *data)
 void	init_philo(t_philo *philo, t_dataset *data)
 {
 	philo->data = data;
-	philo->left_fork_unlocked = true;
-	philo->right_fork_unlocked = true;
-	philo->printf_unlocked = true;
 	pthread_mutex_init(&philo->last_meal_lock, NULL);
 	pthread_mutex_init(&philo->times_eaten_lock, NULL);
 }
