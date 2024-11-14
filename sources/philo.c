@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 20:14:53 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/11/13 18:58:21 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/14 17:52:41 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,60 +45,6 @@ void	philo(t_philo *philo)
 	}
 }
 
-bool	mealcheck(t_dataset *data)
-{
-	t_philo			*ptr;
-	unsigned int	limit;
-
-	if (data->limit == false)
-		return (false);
-	else
-	{
-		limit = data->eat_max;
-		ptr = &(*data->first_philo);
-		if (ptr->times_eaten < limit)
-			return (false);
-		ptr = &(*ptr->left_philo);
-		while (ptr->position != 1)
-		{
-			if (ptr->times_eaten < limit)
-				return (false);
-			ptr = &(*ptr->left_philo);
-		}
-		data->game_over = true;
-		return (true);
-	}
-}
-
-void	livecheck(t_dataset *data)
-{
-	t_philo			*ptr;
-
-	usleep(1000);
-	while (1)
-	{
-		if (mealcheck(data) == true)
-			return ;
-		ptr = &(*data->first_philo);
-		if (data->t_die <= (get_ts(data) - ptr->last_meal))
-		{
-			philo_dead(ptr);
-			return ;
-		}
-		ptr = &(*ptr->left_philo);
-		while (ptr->position != 1)
-		{
-			if (data->t_die <= (get_ts(data) - ptr->last_meal))
-			{
-				philo_dead(ptr);
-				return ;
-			}
-			ptr = &(*ptr->left_philo);
-		}
-		usleep(1000);
-	}
-}
-
 int	create_threads(t_dataset *data)
 {
 	t_philo	*ptr;
@@ -115,6 +61,7 @@ int	create_threads(t_dataset *data)
 			return (EXIT_FAILURE);
 		i++;
 	}
+	usleep(1000);
 	if (pthread_create(&data->death_check, NULL, (void *)&livecheck, data) != 0)
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);

@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 13:41:16 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/11/13 18:57:58 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/14 17:37:38 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ t_dataset	*init_data(int argc, char **argv)
 	data->t_spleep = ft_atou(argv[4]);
 	data->game_over = false;
 	pthread_mutex_init(&(data->print_lock), NULL);
+	pthread_mutex_init(&(data->game_over_lock), NULL);
 	if (argc == 6)
 	{
 		data->limit = true;
@@ -92,6 +93,8 @@ void	init_philo(t_philo *philo, t_dataset *data)
 	philo->left_fork_unlocked = true;
 	philo->right_fork_unlocked = true;
 	philo->printf_unlocked = true;
+	pthread_mutex_init(&philo->last_meal_lock, NULL);
+	pthread_mutex_init(&philo->times_eaten_lock, NULL);
 }
 
 t_philo	*create_philos(t_dataset *data)

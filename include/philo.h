@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 20:17:36 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/11/13 18:57:24 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:38:23 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,9 @@ typedef struct s_philo
 	struct s_fork		*right_fork;
 	struct s_philo		*right_philo;
 	struct s_dataset	*data;
+	pthread_mutex_t		times_eaten_lock;
 	unsigned int		times_eaten;
+	pthread_mutex_t		last_meal_lock;
 	unsigned int		last_meal;
 	bool				left_fork_unlocked;
 	bool				right_fork_unlocked;
@@ -53,6 +55,7 @@ typedef struct s_dataset
 	t_philo			*first_philo;
 	struct timeval	time_start;
 	pthread_t		death_check;
+	pthread_mutex_t	game_over_lock;
 	bool			game_over;
 	pthread_mutex_t	print_lock;
 }	t_dataset;
@@ -79,7 +82,6 @@ unsigned int	get_ts(t_dataset *data);
 void			kill_philo(t_philo *philo);
 
 int				run_simulation(t_dataset *data);
-void			livecheck(t_dataset *data);
 
 int				philo_print(t_philo *philo, char *string);
 int				thinking(t_philo *philo);
@@ -88,4 +90,9 @@ int				eating(t_philo *philo);
 int				sleeping(t_philo *philo);
 
 int				philo_print(t_philo *philo, char *string);
+
+bool			game_over_check(t_dataset *data);
+void			livecheck(t_dataset *data);
+bool			mealcheck(t_dataset *data);
+
 #endif

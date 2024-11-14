@@ -3,9 +3,10 @@ NAME 		=	philo
 FLAGS		=	-Wall -Werror -Wextra  -pthread #-fsanitize=thread
 
 FILES		=	main.c \
-				parcing.c \
 				philo.c	\
+				parcing.c \
 				philo_tools.c \
+				philo_monitor.c \
 				philo_actions.c
 
 SOURCES_DIR	=	./sources/
