@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 20:14:53 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/11/14 17:52:41 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/18 20:11:39 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,10 @@
 int		create_threads(t_dataset *data);
 void	philo(t_philo *philo);
 int		run_simulation(t_dataset *data);
+void	uneaven_adjust(t_philo *philo);
 
 void	philo(t_philo *philo)
 {
-	philo->times_eaten = 0;
-	philo->last_meal = 0;
-	thinking(philo);
 	if (philo->position % 2 == 0)
 	{
 		if (grab_forks(philo) == EXIT_FAILURE)
@@ -28,6 +26,7 @@ void	philo(t_philo *philo)
 	}
 	else
 	{
+		thinking(philo);
 		usleep(1000);
 		if (grab_forks(philo) == EXIT_FAILURE)
 			return ;
@@ -44,6 +43,38 @@ void	philo(t_philo *philo)
 			return ;
 	}
 }
+
+void	uneaven_adjust(t_philo *philo)
+{
+	unsigned int	t_eat;
+	unsigned int 	think_max;
+
+	t_eat = philo->data->t_eat;
+	think_max = (philo->data->t_die - philo->data->t_eat - philo->data->t_spleep);
+	if (philo->data->seats % 2 != 0)
+	{
+		// usleep(((2 * t_eat) - philo->data->t_spleep) * 1000);
+		if ((t_eat * 1000) < (think_max * 1000))
+		{
+			usleep(t_eat * 1000);
+		}
+	}
+	return ;
+}
+/*
+bool	neighbour_more_hungry(t_philo	*philo)
+{
+	pthread_mutex_lock(&philo->left_philo->last_meal_lock);
+	if (philo->left_philo->last_meal < philo->last_meal)
+		return (pthread_mutex_unlock(&philo->left_philo->last_meal_lock), true);
+	pthread_mutex_unlock(&philo->left_philo->last_meal_lock);
+	pthread_mutex_lock(&philo->right_philo->last_meal_lock);
+	if (philo->right_philo->last_meal < philo->last_meal)
+		return (pthread_mutex_unlock(&philo->right_philo->last_meal_lock), true);
+	pthread_mutex_unlock(&philo->right_philo->last_meal_lock);
+	return (false);
+}
+*/
 
 int	create_threads(t_dataset *data)
 {

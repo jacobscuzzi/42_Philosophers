@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 17:49:43 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/11/14 18:30:39 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/18 16:58:44 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,10 @@ bool	still_hungry(t_philo *philo)
 	unsigned int	limit;
 
 	limit = philo->data->eat_max;
-	pthread_mutex_lock(&philo->times_eaten_lock);
 	if (philo->times_eaten < limit)
-	{
-		pthread_mutex_unlock(&philo->times_eaten_lock);
 		return (true);
-	}
 	else
-	{
-		pthread_mutex_unlock(&philo->times_eaten_lock);
 		return (false);
-	}
 }
 
 bool	mealcheck(t_dataset *data)
@@ -51,23 +44,24 @@ bool	mealcheck(t_dataset *data)
 
 	if (data->limit == false)
 		return (false);
-	else
+	ptr = &(*data->first_philo);
+	pthread_mutex_lock(&ptr->full_lock);
+	if (ptr->full == false)
+		return (pthread_mutex_unlock(&ptr->full_lock), false);
+	pthread_mutex_unlock(&ptr->full_lock);
+	ptr = &(*ptr->left_philo);
+	while (ptr->position != 1)
 	{
-		ptr = &(*data->first_philo);
-		if (still_hungry(ptr) == true)
-			return (false);
+		pthread_mutex_lock(&ptr->full_lock);
+		if (ptr->full == false)
+			return (pthread_mutex_unlock(&ptr->full_lock), false);
+		pthread_mutex_unlock(&ptr->full_lock);
 		ptr = &(*ptr->left_philo);
-		while (ptr->position != 1)
-		{
-			if (still_hungry(ptr) == true)
-				return (false);
-			ptr = &(*ptr->left_philo);
-		}
-		pthread_mutex_lock(&data->game_over_lock);
-		data->game_over = true;
-		pthread_mutex_unlock(&data->game_over_lock);
-		return (true);
 	}
+	pthread_mutex_lock(&data->game_over_lock);
+	data->game_over = true;
+	pthread_mutex_unlock(&data->game_over_lock);
+	return (true);
 }
 
 bool	still_alive(t_philo *philo)

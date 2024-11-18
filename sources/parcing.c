@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 13:41:16 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/11/14 21:35:38 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/18 16:35:45 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,13 +83,16 @@ int	init_forks(t_dataset *data)
 	}
 	data->first_philo->right_fork = pointer->left_fork;
 	return (EXIT_SUCCESS);
-}
+}	
 
 void	init_philo(t_philo *philo, t_dataset *data)
 {
 	philo->data = data;
+	philo->times_eaten = 0;
+	philo->last_meal = 0;
+	philo->full = false;
 	pthread_mutex_init(&philo->last_meal_lock, NULL);
-	pthread_mutex_init(&philo->times_eaten_lock, NULL);
+	pthread_mutex_init(&philo->full_lock, NULL);
 }
 
 t_philo	*create_philos(t_dataset *data)

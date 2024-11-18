@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 20:15:19 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/11/14 21:57:09 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/15 16:45:23 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	free_phillo(t_philo *philo)
 	if (philo->left_philo && philo->left_philo->position != 1)
 		free_phillo(philo->left_philo);
 	pthread_mutex_destroy(&philo->last_meal_lock);
-	pthread_mutex_destroy(&philo->times_eaten_lock);
+	pthread_mutex_destroy(&philo->full_lock);
 	if (philo->left_fork)
 	{
 		pthread_mutex_destroy(&philo->left_fork->lock);
@@ -39,7 +39,9 @@ void	philo_dead(t_philo *philo)
 	pthread_mutex_lock(&philo->data->game_over_lock);
 	philo->data->game_over = true;
 	pthread_mutex_unlock(&philo->data->game_over_lock);
-	philo_print(philo, "died");
+	pthread_mutex_lock(&(philo->data->print_lock));
+	printf("%u %d died\n", get_ts(philo->data), philo->position);
+	pthread_mutex_unlock(&(philo->data->print_lock));
 }
 
 int	main(int argc, char **argv)
